@@ -1,0 +1,23 @@
+so, here is the description of my final year project. 
+
+i have to create a chabot consists of three pipelines
+
+For this chatbot also stores the context of the conversation of the user according to their login. 
+
+
+
+1 - blog pipeline: In this pipeline user come to the chatbot, user tells chatbot a query, that, he wants a niche which is low competitve and easy to rank in google index, chabot takes his query go to agent_1 which send this to Backend LLM, make a web search, gather all the data and then filter out those topic which are less competetive and easy to rank in google, LLM gives response to frontend and then frontend shows to the user. then user select this topic and wants a blog written by ai. chatbot takes this topic and go to agent_2 which takes his topic and go to LLM make a seo optimized blog with title and everything a good seo optimized blog needs, after that chatbot provide user with seo optimized blog. 
+
+
+
+2 - Youtube automation pipeline: User write a query that he want to make a good youtube video which is less competitve, query goes to agent_1 make a websearch and give user a response of the youtube video titles which are less comeptitve. after that user tells chatbot that he wants chatbot to write a script for video, this query goes to agent_2 which make the script, and give back response to the user. now user wants to convert this text to audio, agent is also available for that which makes text to audio, give back user an audio file which is downloadbale, after that user want chabtot to make ai video according to the script scenes, agent_4 makes a video with the help of LLM, and gives video to the user.
+
+
+
+3 - UGC Ads: in this user simply wirtes that he want to create an ai ad for his t-shirts, then this query go to agent, which with the help of video generation model make an ai ad of male and female who wore his shirt, makes an ai ad of 5-8 seconds, also with that make 4-5 pics of male and female model who wore his short from different
+angles. 
+
+
+
+Also i want to find open source models for this project. i host these models on my own vps hosting so it will be free of cost. 
+Tech stack: for this project i am planning to use next.js for frontend, Django for backend.
