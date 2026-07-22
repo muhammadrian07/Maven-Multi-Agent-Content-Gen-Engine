@@ -22,7 +22,7 @@ const COLUMNS = [
     title: "YouTube Pipeline",
     icon: (
       <Image
-        src="/video.png"
+        src="/assets/video.png"
         alt=""
         width={56}
         height={56}

@@ -5,7 +5,7 @@ import Image from "next/image";
  * Uses a real <Image> layer so the asset always paints (CSS-only bg can look “missing”
  * when overlaid with the same light-blue wash as the photo itself).
  */
-export const PAGE_TEXTURE_SRC = "/pawel-czerwinski-9qfTn6zW7bQ-unsplash.jpg";
+export const PAGE_TEXTURE_SRC = "/assets/pawel-czerwinski-9qfTn6zW7bQ-unsplash.jpg";
 export const PAGE_TEXTURE_FALLBACK = "#E8F0FC";
 
 type PageTextureBackgroundProps = {
