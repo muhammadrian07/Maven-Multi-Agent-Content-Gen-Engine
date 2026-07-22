@@ -25,7 +25,7 @@ export function LoginForm() {
   const handleGoogle = useCallback(
     async (idToken: string) => {
       await loginWithGoogle({ id_token: idToken });
-      router.replace("/");
+      router.replace("/app");
     },
     [loginWithGoogle, router],
   );
@@ -42,7 +42,7 @@ export function LoginForm() {
 
     try {
       await login({ email: email.trim(), password });
-      router.replace("/");
+      router.replace("/app");
     } catch (error) {
       setErrors({
         form:

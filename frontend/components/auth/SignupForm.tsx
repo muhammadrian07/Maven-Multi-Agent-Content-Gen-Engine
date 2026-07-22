@@ -27,7 +27,7 @@ export function SignupForm() {
   const handleGoogle = useCallback(
     async (idToken: string) => {
       await loginWithGoogle({ id_token: idToken });
-      router.replace("/");
+      router.replace("/app");
     },
     [loginWithGoogle, router],
   );
@@ -53,7 +53,7 @@ export function SignupForm() {
         email: email.trim(),
         password,
       });
-      router.replace("/");
+      router.replace("/app");
     } catch (error) {
       setErrors({
         form:

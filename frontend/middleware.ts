@@ -6,7 +6,7 @@ const AUTH_PAGES = new Set(["/login", "/signup"]);
 
 /**
  * Soft gate only: cookie presence does not prove a valid session.
- * HomeGate still verifies via /api/auth/me against Django.
+ * / is the public landing page; /app is the signed-in area.
  */
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,21 +14,21 @@ export function middleware(request: NextRequest) {
     Boolean(request.cookies.get(ACCESS_COOKIE)?.value) ||
     Boolean(request.cookies.get(REFRESH_COOKIE)?.value);
 
-  if (pathname === "/" && !hasSession) {
+  if (pathname === "/app" && !hasSession) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     return NextResponse.redirect(loginUrl);
   }
 
   if (AUTH_PAGES.has(pathname) && hasSession) {
-    const homeUrl = request.nextUrl.clone();
-    homeUrl.pathname = "/";
-    return NextResponse.redirect(homeUrl);
+    const appUrl = request.nextUrl.clone();
+    appUrl.pathname = "/app";
+    return NextResponse.redirect(appUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/signup"],
+  matcher: ["/", "/app", "/login", "/signup"],
 };
