@@ -1,4 +1,4 @@
-so, here is the description of my final year project
+so, here is the description of my final year project.
 
 i have to create a chabot consists of three pipelines
 
