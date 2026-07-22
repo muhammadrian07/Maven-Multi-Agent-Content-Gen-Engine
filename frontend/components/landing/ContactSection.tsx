@@ -9,7 +9,7 @@ function ContactIllustration() {
       viewBox="0 0 420 340"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="h-auto w-full max-w-md text-[rgb(56,38,106)]"
+      className="h-auto w-full max-w-md text-white"
       aria-hidden
     >
       <rect x="90" y="160" width="180" height="110" rx="8" stroke="currentColor" strokeWidth="2" />
@@ -32,7 +32,10 @@ function ContactIllustration() {
   );
 }
 
-/** Matches roadmap: white surface with landing-purple text for contrast. */
+/**
+ * Contact band: translucent black overlay over the page texture,
+ * with light content on top for contrast.
+ */
 export function ContactSection() {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -40,17 +43,20 @@ export function ContactSection() {
   const [company, setCompany] = useState("");
 
   return (
-    <section id="contact" className="w-full bg-[#E8F0FC] text-[rgb(56,38,106)]">
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:px-8 lg:py-24">
+    <section id="contact" className="relative w-full overflow-hidden">
+      {/* Sits above page texture, below form/illustration — texture still peeks through */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/40" />
+
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:px-8 lg:py-24">
         <div className="order-2 flex justify-center lg:order-1 lg:justify-start">
           <ContactIllustration />
         </div>
 
         <div className="order-1 lg:order-2">
-          <h2 className="text-[32px] font-normal leading-normal text-[rgb(56,38,106)] sm:text-[36px]">
+          <h2 className="text-[32px] font-normal leading-normal text-white sm:text-[36px]">
             Contact us
           </h2>
-          <p className="mt-3 max-w-md text-[16px] font-normal leading-normal text-[rgb(56,38,106)]/70">
+          <p className="mt-3 max-w-md text-[16px] font-normal leading-normal text-white/75">
             Tell us a little about your team and we&apos;ll help you get started
             with maven.ai.
           </p>
@@ -73,7 +79,7 @@ export function ContactSection() {
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-[rgb(56,38,106)]/10 focus:ring-2 focus:ring-brand"
+                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-brand"
               />
             </label>
             <label className="block">
@@ -84,7 +90,7 @@ export function ContactSection() {
                 placeholder="Business email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-[rgb(56,38,106)]/10 focus:ring-2 focus:ring-brand"
+                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-brand"
               />
             </label>
             <label className="block">
@@ -95,7 +101,7 @@ export function ContactSection() {
                 placeholder="Company"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-[rgb(56,38,106)]/10 focus:ring-2 focus:ring-brand"
+                className="h-12 w-full rounded-xl border-0 bg-white px-4 text-[16px] font-normal leading-normal text-[rgb(56,38,106)] placeholder:text-[rgb(56,38,106)]/40 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-brand"
               />
             </label>
             <button

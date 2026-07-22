@@ -14,9 +14,8 @@ export function LandingHero() {
           AI-powered synthesis design
         </h1>
         <p className="mt-5 max-w-md text-[16px] font-normal leading-normal text-white/75">
-          Plan content pipelines, discover low-competition topics, and generate
-          SEO blogs, YouTube scripts, and UGC ads with multi-agent AI —
-          tailored to your workflow.
+          Discover low-competition niches, generate SEO blogs, YouTube scripts, text-to-audio, video generation 
+          and UGC ads with multi-agent AI, end to end.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <GetStartedButton />

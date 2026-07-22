@@ -27,7 +27,7 @@ export function SignupForm() {
   const handleGoogle = useCallback(
     async (idToken: string) => {
       await loginWithGoogle({ id_token: idToken });
-      router.replace("/app");
+      router.replace("/user-selection");
     },
     [loginWithGoogle, router],
   );
@@ -53,7 +53,7 @@ export function SignupForm() {
         email: email.trim(),
         password,
       });
-      router.replace("/app");
+      router.replace("/user-selection");
     } catch (error) {
       setErrors({
         form:
@@ -67,8 +67,8 @@ export function SignupForm() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <div className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2.5" noValidate>
         <TextField
           id="signup-full-name"
           name="full_name"
@@ -122,7 +122,7 @@ export function SignupForm() {
 
       <GoogleAuthButton onCredential={handleGoogle} disabled={submitting} />
 
-      <p className="text-center text-sm text-ink/65">
+      <p className="text-center text-xs text-ink/65 sm:text-sm">
         Already have an account?{" "}
         <Link
           href="/login"

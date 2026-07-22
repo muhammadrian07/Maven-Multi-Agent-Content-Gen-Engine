@@ -140,7 +140,7 @@ export function GoogleAuthButton({
   }, [clientId]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       <Button
         type="button"
         variant="secondary"
@@ -152,14 +152,20 @@ export function GoogleAuthButton({
         <GoogleMark />
         Continue with Google
       </Button>
-      {help ? <p className="text-center text-xs text-ink/55">{help}</p> : null}
+      {help ? <p className="text-center text-[11px] leading-snug text-ink/55">{help}</p> : null}
     </div>
   );
 }
 
 function GoogleMark() {
   return (
-    <svg aria-hidden width="18" height="18" viewBox="0 0 48 48">
+    <svg
+      aria-hidden
+      width="18"
+      height="18"
+      viewBox="0 0 48 48"
+      className="inline-block h-[18px] w-[18px] shrink-0"
+    >
       <path
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.5-.4-3.5z"

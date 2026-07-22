@@ -4,7 +4,7 @@ import { GetStartedButton } from "@/components/landing/GetStartedButton";
 const NAV = [
   { label: "Products", href: "#how-it-works" },
   { label: "Solutions", href: "#how-it-works" },
-  { label: "Team", href: "#partners" },
+  { label: "Team", href: "#team" },
   { label: "Roadmap", href: "#roadmap" },
   { label: "Blog", href: "#contact" },
 ];

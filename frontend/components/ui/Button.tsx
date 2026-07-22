@@ -16,6 +16,10 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   ghost: "text-ink/70 hover:text-ink hover:bg-ink/5 focus-visible:ring-ink/20",
 };
 
+/**
+ * Children are flex items (row + centered) so icons stay inline with labels.
+ * Avoid wrapping icon+text in a block span — Tailwind makes SVGs display:block.
+ */
 export function Button({
   children,
   type = "button",
@@ -30,15 +34,15 @@ export function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`inline-flex h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
+      className={`inline-flex h-9 flex-row items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed sm:h-10 ${variants[variant]} ${className}`}
     >
       {loading ? (
         <span
-          className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent"
+          className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-current border-r-transparent"
           aria-hidden
         />
       ) : null}
-      <span>{loading ? "Please wait…" : children}</span>
+      {loading ? <span>Please wait…</span> : children}
     </button>
   );
 }
