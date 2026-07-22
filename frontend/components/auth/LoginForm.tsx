@@ -25,7 +25,7 @@ export function LoginForm() {
   const handleGoogle = useCallback(
     async (idToken: string) => {
       await loginWithGoogle({ id_token: idToken });
-      router.replace("/app");
+      router.replace("/user-selection");
     },
     [loginWithGoogle, router],
   );
@@ -42,7 +42,7 @@ export function LoginForm() {
 
     try {
       await login({ email: email.trim(), password });
-      router.replace("/app");
+      router.replace("/user-selection");
     } catch (error) {
       setErrors({
         form:
@@ -56,8 +56,8 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <div className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2.5" noValidate>
         <TextField
           id="login-email"
           name="email"
@@ -91,7 +91,7 @@ export function LoginForm() {
 
       <GoogleAuthButton onCredential={handleGoogle} disabled={submitting} />
 
-      <p className="text-center text-sm text-ink/65">
+      <p className="text-center text-xs text-ink/65 sm:text-sm">
         New to Maven?{" "}
         <Link
           href="/signup"

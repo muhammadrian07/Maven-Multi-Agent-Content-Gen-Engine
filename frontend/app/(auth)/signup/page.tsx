@@ -8,10 +8,7 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
   return (
-    <AuthShell
-      title="Create your account"
-      subtitle="One account for blog, YouTube, and UGC ad pipelines."
-    >
+    <AuthShell>
       <SignupForm />
     </AuthShell>
   );

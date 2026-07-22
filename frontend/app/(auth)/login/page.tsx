@@ -8,10 +8,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <AuthShell
-      title="Sign in"
-      subtitle="Access your content pipelines and conversation history."
-    >
+    <AuthShell>
       <LoginForm />
     </AuthShell>
   );

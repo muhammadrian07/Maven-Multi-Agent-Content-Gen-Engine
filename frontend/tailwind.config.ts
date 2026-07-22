@@ -19,6 +19,8 @@ const config: Config = {
         brand: "#2f6bff",
         navy: "#0b1b3a",
         partners: "#ececec",
+        // Landing page full-bleed background
+        landing: "rgb(56, 38, 106)",
       },
       fontFamily: {
         display: ["var(--font-display)", "Syne", "sans-serif"],
