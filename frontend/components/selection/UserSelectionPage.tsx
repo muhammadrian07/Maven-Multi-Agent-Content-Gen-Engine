@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 
 /**
  * Authenticated pipeline picker.
- * Soft middleware gate + client session check; cards are stubs until pipelines ship.
+ * Cards navigate to /maven-*-chatbot-ui for each pipeline.
  */
 export function UserSelectionPage() {
   const router = useRouter();
@@ -20,6 +20,11 @@ export function UserSelectionPage() {
       router.replace("/login");
     }
   }, [loading, user, router]);
+
+  useEffect(() => {
+    // Warm chatbot routes so Select feels instant.
+    PIPELINE_CARDS.forEach((card) => router.prefetch(card.href));
+  }, [router]);
 
   if (loading || !user) {
     return (

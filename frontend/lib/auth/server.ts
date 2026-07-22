@@ -9,6 +9,33 @@ import { djangoAuth } from "@/lib/api/auth";
 import { readAccessToken, readRefreshToken } from "@/lib/auth/cookies";
 import type { AuthResponse, User } from "@/types/auth";
 
+/**
+ * Resolve a usable Django access token (refresh once if only refresh cookie exists).
+ * Caller should attach `rotatedAccess` onto the response when present.
+ */
+export async function resolveAccessToken(): Promise<{
+  accessToken: string | null;
+  rotatedAccess?: string;
+}> {
+  const access = readAccessToken();
+  const refresh = readRefreshToken();
+
+  if (access) {
+    return { accessToken: access };
+  }
+
+  if (!refresh) {
+    return { accessToken: null };
+  }
+
+  try {
+    const refreshed = await djangoAuth.refresh(refresh);
+    return { accessToken: refreshed.access, rotatedAccess: refreshed.access };
+  } catch {
+    return { accessToken: null };
+  }
+}
+
 export function jsonError(message: string, status: number): NextResponse {
   return NextResponse.json({ error: message }, { status });
 }

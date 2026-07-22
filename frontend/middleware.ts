@@ -3,11 +3,17 @@ import type { NextRequest } from "next/server";
 import { ACCESS_COOKIE, REFRESH_COOKIE } from "@/lib/auth/constants";
 
 const AUTH_PAGES = new Set(["/login", "/signup"]);
-const PROTECTED_PAGES = new Set(["/app", "/user-selection"]);
+const PROTECTED_PAGES = new Set([
+  "/app",
+  "/user-selection",
+  "/maven-blog-chatbot-ui",
+  "/maven-video-chatbot-ui",
+  "/maven-ads-chatbot-ui",
+]);
 
 /**
  * Soft gate only: cookie presence does not prove a valid session.
- * / is public landing; /user-selection is the post-login pipeline picker.
+ * Chatbot UIs and pipeline picker require a session cookie.
  */
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -31,5 +37,14 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/app", "/user-selection", "/login", "/signup"],
+  matcher: [
+    "/",
+    "/app",
+    "/user-selection",
+    "/maven-blog-chatbot-ui",
+    "/maven-video-chatbot-ui",
+    "/maven-ads-chatbot-ui",
+    "/login",
+    "/signup",
+  ],
 };

@@ -3,7 +3,7 @@ export const PIPELINE_CARDS = [
     id: "blog",
     title: "Maven Blog",
     iconSrc: "/assets/blogger.png",
-    href: "#",
+    href: "/maven-blog-chatbot-ui",
     bullets: [
       "Discover low-competition niches",
       "Rank-friendly topic shortlists",
@@ -14,7 +14,7 @@ export const PIPELINE_CARDS = [
     id: "video",
     title: "Maven Video",
     iconSrc: "/assets/video.png",
-    href: "#",
+    href: "/maven-video-chatbot-ui",
     bullets: [
       "YouTube title research",
       "Script generation for scenes",
@@ -25,7 +25,7 @@ export const PIPELINE_CARDS = [
     id: "ads",
     title: "Maven Ads",
     iconSrc: "/assets/ads.png",
-    href: "#",
+    href: "/maven-ads-chatbot-ui",
     bullets: [
       "UGC ad generation",
       "Model shots from multiple angles",

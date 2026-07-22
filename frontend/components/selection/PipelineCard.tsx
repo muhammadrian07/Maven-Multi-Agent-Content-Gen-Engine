@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type PipelineCardProps = {
   title: string;
@@ -8,12 +10,15 @@ type PipelineCardProps = {
   bullets: readonly string[];
 };
 
-/** Single pipeline choice card on the user-selection screen. */
+/** Single pipeline choice card — navigates to the pipeline chatbot UI. */
 export function PipelineCard({ title, iconSrc, href, bullets }: PipelineCardProps) {
+  const router = useRouter();
+
   return (
-    <Link
-      href={href}
-      className="group flex h-full flex-col rounded-2xl border border-white/50 bg-white/85 p-5 shadow-[0_12px_40px_rgba(30,60,120,0.12)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_18px_50px_rgba(30,60,120,0.18)] sm:p-6"
+    <button
+      type="button"
+      onClick={() => router.push(href)}
+      className="group flex h-full w-full flex-col rounded-2xl border border-white/50 bg-white/85 p-5 text-left shadow-[0_12px_40px_rgba(30,60,120,0.12)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_18px_50px_rgba(30,60,120,0.18)] sm:p-6"
     >
       <div className="mb-4 flex justify-center">
         <Image
@@ -47,6 +52,6 @@ export function PipelineCard({ title, iconSrc, href, bullets }: PipelineCardProp
       <span className="mt-5 inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition group-hover:bg-[#2557e0]">
         Select
       </span>
-    </Link>
+    </button>
   );
 }
