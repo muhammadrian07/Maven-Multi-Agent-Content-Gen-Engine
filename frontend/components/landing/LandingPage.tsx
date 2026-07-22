@@ -8,7 +8,7 @@ import { Roadmap } from "@/components/landing/Roadmap";
 
 export function LandingPage() {
   return (
-    <div className="font-landing bg-white text-[16px] font-normal leading-normal text-black">
+    <div className="min-h-screen bg-landing font-landing text-[16px] font-normal leading-normal text-white">
       <LandingHeader />
       <main>
         <LandingHero />
