@@ -1,15 +1,10 @@
 from conversations.models import Conversation, ConversationPhase
-from conversations.services.pipelines.base import (
-    BasePipelineHandler,
-    HandlerResult,
-    tools_note,
-)
+from conversations.services.agent import run_pipeline_llm
+from conversations.services.pipelines.base import BasePipelineHandler, HandlerResult
 
 
 class VideoPipelineHandler(BasePipelineHandler):
-    """
-    video UI → same research agent (YouTube title prompt) → script-writer → video-gen.
-    """
+    """video UI → local LLM with full chat transcript."""
 
     pipeline = "video"
 
@@ -23,63 +18,34 @@ class VideoPipelineHandler(BasePipelineHandler):
         user_text: str,
         tools: list[str],
     ) -> HandlerResult:
-        note = tools_note(tools)
+        phase = conversation.phase or ConversationPhase.RESEARCH
         lower = user_text.lower()
 
-        if conversation.phase == ConversationPhase.RESEARCH:
-            if any(key in lower for key in ("script", "write scenes", "generate script")):
-                return HandlerResult(
-                    reply=(
-                        f"Handing off to the script-writer agent{note}.\n\n"
-                        f"I'll turn title research into scene scripts for: "
-                        f"“{user_text.strip()[:160]}”.\n"
-                        "(Script model will plug in here.)"
-                    ),
-                    agent="script_writer",
-                    phase=ConversationPhase.SCRIPTING,
-                    title=user_text.strip()[:80] or None,
-                    context_updates={"title_brief": user_text},
-                )
+        if phase == ConversationPhase.RESEARCH and any(
+            k in lower for k in ("script", "write scenes", "generate script")
+        ):
+            phase = ConversationPhase.SCRIPTING
+        elif phase == ConversationPhase.SCRIPTING and any(
+            k in lower for k in ("video", "render", "generate video", "animate")
+        ):
+            phase = ConversationPhase.VIDEO_GEN
 
-            return HandlerResult(
-                reply=(
-                    f"Research agent{note} — YouTube title mode: I'll help with title "
-                    "research and angle shortlists (same chat service as blog, different prompt).\n\n"
-                    f"You said: “{user_text.strip()[:200]}”.\n\n"
-                    "Share a topic or niche. When ready, say “write a script” to continue "
-                    "into scripting, then video generation."
-                ),
-                agent="shared_research",
-                phase=ConversationPhase.RESEARCH,
-                title=user_text.strip()[:80] or None,
-            )
+        reply, llm_meta = run_pipeline_llm(
+            conversation=conversation,
+            phase=phase,
+            tools=tools,
+            user_text=user_text,
+        )
 
-        if conversation.phase == ConversationPhase.SCRIPTING:
-            if any(key in lower for key in ("video", "render", "generate video", "animate")):
-                return HandlerResult(
-                    reply=(
-                        f"Attaching the video-generation agent{note}.\n"
-                        "Text-to-audio & scene videos will run here."
-                    ),
-                    agent="video_gen",
-                    phase=ConversationPhase.VIDEO_GEN,
-                )
-
-            return HandlerResult(
-                reply=(
-                    f"Script-writer agent{note} (stub): refining scenes for "
-                    f"“{user_text.strip()[:160]}”.\n"
-                    "Say “generate video” when you want the video-gen handoff."
-                ),
-                agent="script_writer",
-                phase=ConversationPhase.SCRIPTING,
-            )
+        agent = {
+            ConversationPhase.SCRIPTING: "script_writer",
+            ConversationPhase.VIDEO_GEN: "video_gen",
+        }.get(phase, "shared_research")
 
         return HandlerResult(
-            reply=(
-                f"Video-gen agent{note} (stub): queued scene render for "
-                f"“{user_text.strip()[:160]}”."
-            ),
-            agent="video_gen",
-            phase=ConversationPhase.VIDEO_GEN,
+            reply=reply,
+            agent=agent,
+            phase=phase,
+            title=user_text.strip()[:80] or None,
+            meta=llm_meta,
         )

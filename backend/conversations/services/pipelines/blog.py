@@ -1,15 +1,10 @@
 from conversations.models import Conversation, ConversationPhase
-from conversations.services.pipelines.base import (
-    BasePipelineHandler,
-    HandlerResult,
-    tools_note,
-)
+from conversations.services.agent import run_pipeline_llm
+from conversations.services.pipelines.base import BasePipelineHandler, HandlerResult
 
 
 class BlogPipelineHandler(BasePipelineHandler):
-    """
-    blog UI → shared research chat → blog-writer agent.
-    """
+    """blog UI → local LLM with full chat transcript."""
 
     pipeline = "blog"
 
@@ -23,44 +18,28 @@ class BlogPipelineHandler(BasePipelineHandler):
         user_text: str,
         tools: list[str],
     ) -> HandlerResult:
-        note = tools_note(tools)
+        phase = conversation.phase or ConversationPhase.RESEARCH
+        if phase == ConversationPhase.RESEARCH and _wants_writing(user_text):
+            phase = ConversationPhase.WRITING
 
-        if conversation.phase == ConversationPhase.RESEARCH:
-            # Heuristic handoff stub until real agents are wired.
-            if any(
-                key in user_text.lower()
-                for key in ("write", "draft", "generate blog", "start writing")
-            ):
-                return HandlerResult(
-                    reply=(
-                        f"Moving from niche research into the blog-writer agent{note}.\n\n"
-                        f"I'll draft an SEO-ready outline for: “{user_text.strip()[:160]}”.\n"
-                        "(Writer model will plug in here.)"
-                    ),
-                    agent="blog_writer",
-                    phase=ConversationPhase.WRITING,
-                    title=user_text.strip()[:80] or None,
-                    context_updates={"brief": user_text},
-                )
-
-            return HandlerResult(
-                reply=(
-                    f"Research agent{note}: I'll help discover low-competition niches "
-                    "and rank-friendly topic shortlists.\n\n"
-                    f"You said: “{user_text.strip()[:200]}”.\n\n"
-                    "Tell me your niche, audience, or ask me to shortlist topics. "
-                    "When you're ready, say “write a draft” to hand off to the blog writer."
-                ),
-                agent="shared_research",
-                phase=ConversationPhase.RESEARCH,
-                title=user_text.strip()[:80] or None,
-            )
-
-        return HandlerResult(
-            reply=(
-                f"Blog-writer agent{note} (stub): received “{user_text.strip()[:160]}”.\n"
-                "Full draft generation will attach here."
-            ),
-            agent="blog_writer",
-            phase=ConversationPhase.WRITING,
+        reply, llm_meta = run_pipeline_llm(
+            conversation=conversation,
+            phase=phase,
+            tools=tools,
+            user_text=user_text,
         )
+        return HandlerResult(
+            reply=reply,
+            agent="blog_writer" if phase == ConversationPhase.WRITING else "shared_research",
+            phase=phase,
+            title=user_text.strip()[:80] or None,
+            meta=llm_meta,
+        )
+
+
+def _wants_writing(text: str) -> bool:
+    lower = text.lower()
+    return any(
+        key in lower
+        for key in ("write", "draft", "generate blog", "start writing", "full article")
+    )

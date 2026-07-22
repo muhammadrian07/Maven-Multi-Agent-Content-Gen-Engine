@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from conversations.models import Conversation, ConversationPhase
+from conversations.models import Conversation
 
 
 @dataclass

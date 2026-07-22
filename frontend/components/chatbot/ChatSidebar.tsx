@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ChatbotConfig } from "@/components/chatbot/config";
 import { USER_SELECTION_PATH } from "@/components/selection/constants";
+import type { Conversation } from "@/types/conversations";
 
 type ChatSidebarProps = {
   config: ChatbotConfig;
@@ -12,11 +13,14 @@ type ChatSidebarProps = {
   onToggle: () => void;
   onNewChat: () => void;
   userLabel: string;
+  conversations: Conversation[];
+  activeConversationId: string | null;
+  onSelectConversation: (id: string) => void;
 };
 
 /**
  * Collapsible chat sidebar.
- * Closed = icon rail; open = wider panel (layout idea only — Maven content, not a ChatGPT clone).
+ * Closed = icon rail; open = wider panel with saved chats from the DB.
  */
 export function ChatSidebar({
   config,
@@ -24,10 +28,13 @@ export function ChatSidebar({
   onToggle,
   onNewChat,
   userLabel,
+  conversations,
+  activeConversationId,
+  onSelectConversation,
 }: ChatSidebarProps) {
   if (!open) {
     return (
-      <aside className="flex w-[52px] shrink-0 flex-col items-center gap-3 border-r border-black/[0.06] bg-[#ececec] py-3 sm:w-[56px]">
+      <aside className="flex h-full w-[52px] shrink-0 flex-col items-center gap-3 overflow-hidden border-r border-black/[0.06] bg-[#ececec] py-3 sm:w-[56px]">
         <IconButton title="Open sidebar" onClick={onToggle}>
           <PanelIcon />
         </IconButton>
@@ -55,8 +62,8 @@ export function ChatSidebar({
   }
 
   return (
-    <aside className="flex w-[260px] shrink-0 flex-col border-r border-black/[0.06] bg-[#ececec] sm:w-[280px]">
-      <div className="flex items-center justify-between gap-2 px-3 py-3">
+    <aside className="flex h-full w-[260px] shrink-0 flex-col overflow-hidden border-r border-black/[0.06] bg-[#ececec] sm:w-[280px]">
+      <div className="flex shrink-0 items-center justify-between gap-2 px-3 py-3">
         <div className="flex min-w-0 items-center gap-2">
           <Image
             src={config.iconSrc}
@@ -74,7 +81,7 @@ export function ChatSidebar({
         </IconButton>
       </div>
 
-      <div className="flex flex-col gap-1 px-2">
+      <div className="flex shrink-0 flex-col gap-1 px-2">
         <SidebarRow onClick={onNewChat} icon={<PlusIcon />} label="New chat" />
         <SidebarRow
           href={USER_SELECTION_PATH}
@@ -84,13 +91,39 @@ export function ChatSidebar({
       </div>
 
       <div className="mt-4 flex min-h-0 flex-1 flex-col px-2">
-        <p className="px-2 pb-2 text-xs font-medium text-black/40">Chats</p>
-        <div className="flex-1 overflow-y-auto rounded-xl px-2 py-6 text-center text-xs text-black/35">
-          No chats yet. Start one from the composer.
+        <p className="shrink-0 px-2 pb-2 text-xs font-medium text-black/40">Chats</p>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          {conversations.length === 0 ? (
+            <p className="px-2 py-6 text-center text-xs text-black/35">
+              No chats yet. Start one from the composer.
+            </p>
+          ) : (
+            <ul className="space-y-0.5 pb-2">
+              {conversations.map((item) => {
+                const active = item.id === activeConversationId;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => onSelectConversation(item.id)}
+                      className={`w-full truncate rounded-xl px-2.5 py-2 text-left text-sm transition ${
+                        active
+                          ? "bg-black/[0.08] font-medium text-black"
+                          : "text-black/75 hover:bg-black/[0.05]"
+                      }`}
+                      title={item.title || "Chat"}
+                    >
+                      {item.title?.trim() || "Untitled chat"}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
 
-      <div className="mt-auto border-t border-black/[0.06] px-3 py-3">
+      <div className="mt-auto shrink-0 border-t border-black/[0.06] px-3 py-3">
         <div className="flex items-center gap-2.5">
           <div
             aria-hidden

@@ -129,3 +129,11 @@ SIMPLE_JWT = {
 
 # Same OAuth Web Client ID as frontend NEXT_PUBLIC_GOOGLE_CLIENT_ID.
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+
+# Local Ollama (no cloud key). Example: ollama run gemma3:270m
+OLLAMA_BASE_URL = env("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_MODEL = env("OLLAMA_MODEL", "gemma3:270m")
+OLLAMA_TIMEOUT_SECONDS = int(env("OLLAMA_TIMEOUT_SECONDS", "120"))
+
+# Approximate cumulative token budget per conversation (input + output estimates).
+CHAT_TOKEN_LIMIT = int(env("CHAT_TOKEN_LIMIT", "5000"))
